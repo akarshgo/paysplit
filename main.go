@@ -1,26 +1,29 @@
 package main
 
 import (
-	"fmt"
+	"database/sql"
 	"log"
 
+	"github.com/akarshgo/paysplit/api"
+	"github.com/akarshgo/paysplit/db"
 	"github.com/gofiber/fiber/v2"
-)
-
-const (
-	listeningPort = ":3000"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	fmt.Println("Paysplit initialised")
+	dsn := "postgres://paysplit:paysplit@localhost:5432/paysplit?sslmode=disable"
+	sqlDB, err := sql.Open("postgres", dsn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer sqlDB.Close()
+
+	userStore := db.NewPostgresUserStore(sqlDB)
+	userHandlers := api.NewUserHandlers(userStore)
 
 	app := fiber.New()
+	api.SetupRoutes(app, userHandlers)
 
-	app.Get("/", handleFoo)
-
-	log.Fatal(app.Listen(listeningPort))
-}
-
-func handleFoo(c *fiber.Ctx) error {
-	return c.SendString("Hello from foo")
+	log.Println("API on :8080")
+	app.Listen(":8080")
 }
