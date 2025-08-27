@@ -20,17 +20,6 @@ type Group struct {
 	CreatedAt time.Time
 }
 
-type Expense struct {
-	ID        string
-	GroupID   string
-	PaidBy    string // UserID
-	Amount    Money
-	Currency  string // "INR"
-	Split     []SplitPart
-	Note      string
-	CreatedAt time.Time
-}
-
 type SplitPart struct {
 	UserID string
 	Share  int   // numerator for ratio splits

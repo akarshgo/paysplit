@@ -22,9 +22,11 @@ func main() {
 	userHandlers := api.NewUserHandlers(userStore)
 	groupStore := db.NewPostGresGroupStore(sqlDB)
 	groupHandlers := api.NewGroupHanlders(groupStore)
+	expenseStore := db.NewPostGresExpenseStore(sqlDB)
+	expenseHandlers := api.NewExpenseHandlers(expenseStore)
 
 	app := fiber.New()
-	api.SetupRoutes(app, userHandlers, groupHandlers)
+	api.SetupRoutes(app, userHandlers, groupHandlers, expenseHandlers)
 
 	log.Println("API on :8080")
 	app.Listen(":8080")
