@@ -2,7 +2,7 @@ package api
 
 import "github.com/gofiber/fiber/v2"
 
-func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *GroupHandlers, expenseHandlers *ExpenseHandlers) {
+func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *GroupHandlers, expenseHandlers *ExpenseHandlers, linksHandlers *LinksHandlers) {
 	// v1 prefix
 	v1 := app.Group("/v1")
 
@@ -24,5 +24,8 @@ func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *Grou
 
 	v1.Get("/groups/:id/balances", expenseHandlers.HandleGroupBalances)
 	v1.Get("/groups/:id/simplify", expenseHandlers.HandleSimplifyDebts)
+
+	//UPI Links
+	v1.Post("/links/settle", linksHandlers.HandleBuildSettleLink)
 
 }

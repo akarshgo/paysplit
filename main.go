@@ -24,9 +24,10 @@ func main() {
 	groupHandlers := api.NewGroupHanlders(groupStore)
 	expenseStore := db.NewPostGresExpenseStore(sqlDB)
 	expenseHandlers := api.NewExpenseHandlers(expenseStore)
+	linkHanlders := api.NewLinksHandlers("paysplit")
 
 	app := fiber.New()
-	api.SetupRoutes(app, userHandlers, groupHandlers, expenseHandlers)
+	api.SetupRoutes(app, userHandlers, groupHandlers, expenseHandlers, linkHanlders)
 
 	log.Println("API on :8080")
 	app.Listen(":8080")

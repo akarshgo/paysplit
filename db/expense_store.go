@@ -17,7 +17,7 @@ type PostGresExpsenseStore struct {
 	db *sql.DB
 }
 
-func NewPostGresExpenseStore(db *sql.DB) PostGresExpsenseStore {
+func NewPostGresExpenseStore(db *sql.DB) *PostGresExpsenseStore {
 	return &PostGresExpsenseStore{
 		db: db,
 	}
