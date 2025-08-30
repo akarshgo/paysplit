@@ -20,7 +20,7 @@ func main() {
 
 	userStore := db.NewPostgresUserStore(sqlDB)
 	userHandlers := api.NewUserHandlers(userStore)
-	groupStore := db.NewPostGresGroupStore(sqlDB)
+	groupStore := db.NewPostgresGroupStore(sqlDB)
 	groupHandlers := api.NewGroupHanlders(groupStore)
 	expenseStore := db.NewPostGresExpenseStore(sqlDB)
 	expenseHandlers := api.NewExpenseHandlers(expenseStore)
