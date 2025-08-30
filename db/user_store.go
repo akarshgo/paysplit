@@ -35,6 +35,12 @@ type PostgresUserStore struct {
 	db *sql.DB
 }
 
+func NewPostgresUserStore(db *sql.DB) *PostgresUserStore {
+	return &PostgresUserStore{
+		db: db,
+	}
+}
+
 func (s *PostgresUserStore) Create(ctx context.Context, u *types.User) error {
 	if strings.TrimSpace(u.Name) == "" {
 		return errors.New("name required")
