@@ -6,11 +6,15 @@ import (
 
 	"github.com/akarshgo/paysplit/api"
 	"github.com/akarshgo/paysplit/db"
+	"github.com/akarshgo/paysplit/logger"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 )
 
 func main() {
+	logger.Init()
+	defer logger.Sync()
+
 	dsn := "postgres://paysplit:paysplit@localhost:5432/paysplit?sslmode=disable"
 	sqlDB, err := sql.Open("postgres", dsn)
 	if err != nil {
@@ -22,7 +26,7 @@ func main() {
 	userHandlers := api.NewUserHandlers(userStore)
 	groupStore := db.NewPostgresGroupStore(sqlDB)
 	groupHandlers := api.NewGroupHanlders(groupStore)
-	expenseStore := db.NewPostGresExpenseStore(sqlDB)
+	expenseStore := db.NewPostgresExpenseStore(sqlDB)
 	expenseHandlers := api.NewExpenseHandlers(expenseStore)
 	linkHanlders := api.NewLinksHandlers("paysplit")
 
