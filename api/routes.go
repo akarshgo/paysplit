@@ -1,6 +1,8 @@
 package api
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
 func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *GroupHandlers, expenseHandlers *ExpenseHandlers, linksHandlers *LinksHandlers) {
 	// v1 prefix
@@ -27,5 +29,8 @@ func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *Grou
 
 	//UPI Links
 	v1.Post("/links/settle", linksHandlers.HandleBuildSettleLink)
+
+	//Helath Check
+	v1.Get("/health", HandleHealth)
 
 }
