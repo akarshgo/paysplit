@@ -7,6 +7,7 @@ import (
 	"github.com/akarshgo/paysplit/api"
 	"github.com/akarshgo/paysplit/db"
 	"github.com/akarshgo/paysplit/logger"
+	rediscli "github.com/akarshgo/paysplit/redis"
 	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 )
@@ -29,6 +30,12 @@ func main() {
 	expenseStore := db.NewPostgresExpenseStore(sqlDB)
 	expenseHandlers := api.NewExpenseHandlers(expenseStore)
 	linkHanlders := api.NewLinksHandlers("paysplit")
+
+	// Initialize Redis before starting the HTTP server
+	rediscli.Init()
+	defer func() {
+		_ = rediscli.Rdb.Close()
+	}()
 
 	app := fiber.New()
 	api.SetupRoutes(app, userHandlers, groupHandlers, expenseHandlers, linkHanlders)

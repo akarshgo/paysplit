@@ -1,6 +1,9 @@
 package api
 
 import (
+	"context"
+
+	rediscli "github.com/akarshgo/paysplit/redis"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -32,5 +35,18 @@ func SetupRoutes(app *fiber.App, userHandlers *UserHandlers, groupHandlers *Grou
 
 	//Helath Check
 	v1.Get("/health", HandleHealth)
+
+	//Redis
+	v1.Get("/ping-redis", func(c *fiber.Ctx) error {
+		ctx := context.Background()
+		if err := rediscli.Rdb.Set(ctx, "paysplit:ping", "pong", 0).Err(); err != nil {
+			return c.Status(500).JSON(fiber.Map{"redis": "error", "err": err.Error()})
+		}
+		val, err := rediscli.Rdb.Get(ctx, "paysplit:ping").Result()
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"redis": "error", "err": err.Error()})
+		}
+		return c.JSON(fiber.Map{"redis": "ok", "val": val})
+	})
 
 }
